@@ -5,7 +5,7 @@ import sqlite3
 
 app = Flask(__name__)
 
-c = Crawler()
+c = Crawler(auth= True)
 
 @app.route('/')
 def auth():

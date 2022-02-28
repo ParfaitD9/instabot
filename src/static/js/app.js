@@ -38,7 +38,7 @@ form.addEventListener('submit', e => {
     
     let data = new FormData(form)
     
-    hr.open('GET', `http://127.0.0.1:5000/followers?username=${data.get('username')}`, true)
+    hr.open('GET', `http://${window.location.host}/followers?username=${data.get('username')}`, true)
     
     hr.send(data)
     console.log(data)
@@ -72,7 +72,7 @@ send.addEventListener('submit', e => {
         let hr = new XMLHttpRequest()
         let data = new FormData(send)
         
-        hr.open('POST', 'http://127.0.0.1:5000/send', true)
+        hr.open('POST', `http://${window.location.host}/send`, true)
         hr.send(data)
 
         hr.onreadystatechange = function () {
