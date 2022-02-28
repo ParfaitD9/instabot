@@ -1,7 +1,9 @@
 import json
+import os
 import re
 import sqlite3
 from selenium import webdriver
+
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.firefox.service import Service
@@ -15,10 +17,15 @@ from bs4 import BeautifulSoup
 
 class Crawler:
     def __init__(self, auth= False) -> None:
+        #opts = webdrive
         if auth:
-            s = Service('/home/parfait/Logs/chromedriver')
-            #service_args= ['--proxy=localhost:9150', '--proxy-type=sock5']
-            self.browser = webdriver.Chrome()
+            opts = webdriver.ChromeOptions()
+            opts.add_argument('--headless')
+            opts.add_argument('--disable-dev-shm-usage')
+            opts.add_argument('--no-sandbox')
+            opts.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
+            s = Service(executable_path= os.environ.get('CHROMEDRIVER_PATH'))
+            self.browser = webdriver.Chrome(service= s, chrome_options= opts)
             self.auth('canurap1@gmail.com', 'Test12345')
         else:
             with open('session.json') as r:
