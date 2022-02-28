@@ -1,3 +1,4 @@
+import os
 import re
 from flask import Flask, jsonify, render_template, request
 from utils.main import Crawler
@@ -61,4 +62,4 @@ def user_listing():
 
 
 if __name__ == '__main__':
-    app.run(debug= True)
+    app.run(host= '0.0.0.0', port=os.environ.get('PORT'))
