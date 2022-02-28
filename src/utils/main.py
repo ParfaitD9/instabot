@@ -102,10 +102,11 @@ class Crawler:
         
 
     def get_followers(self, username):
+        '/html/body/div[1]/section/main/div/header/section/ul/li[2]/a/div'
         self.browser.get('https://www.instagram.com/{}/'.format(username))
         time.sleep(3)
         
-        self.browser.find_element(By.XPATH, '/html/body/div[1]/section/main/div/header/section/ul/li[2]/a/div').click()
+        self.browser.find_element(By.XPATH, '/html/body/div[1]/section/main/div/header/section/ul/li[2]').click()
 
         div = WebDriverWait(self.browser, 15).until(
             EC.presence_of_element_located((By.XPATH, '/html/body/div[6]/div/div/div/div[2]/ul/div/li[1]'))
@@ -136,7 +137,7 @@ class Crawler:
             )
         except TimeoutException:
             print('Timeout')
-            
+
         print(len(data), 'followers found')
 
         r = self.insert_followers(data)
