@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/app.css')}}">
+    <title>Document</title>
+</head>
+<body class="container">
+    <div class="app">
+        <form action="" method="get" id="search-form">
+            <div class="row">
+                <div class="col-md-2">
+                    <p class="form-label">Username</p>
+                </div>
+                <div class="col-md-7">    
+                    <input type="text" class="form-control" name="username" id="username">
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-success">Rechercher</button>
+                </div>
+            </div>
+        </form>
+        <div class="container">
+            <ul id="list" class="list-group">
+            </ul>
+        </div> 
+        <div>
+            
+            <span><button id="send" class="btn btn-secondary" style="display: none;">Lancer l'envoi</button></span>
+        </div>
+        <form action="" method="post" id="send-form">
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="text" name="user" class="form-control">
+                </div>
+                <div class="col-md-6">    
+                    <input type="text" class="form-control" name="message">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-success">Envoyer</button>
+                </div>
+            </div>
+        </form>
+        <span id="datas"></span>
+    </div>
+    
+    <script src="{{url_for('static', filename='js/jquery-3.6.0.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}"></script>
+	
+    <script src="{{url_for('static', filename='js/app.js')}}"></script>
+</body>
+</html>
