@@ -129,6 +129,14 @@ class Crawler:
         data = [fol.strip("S'abonner").split(maxsplit= 1)[0] for fol in data if fol]
         self.browser.find_element(By.XPATH, '/html/body/div[6]/div/div/div/div[1]/div/div[2]/button').click()
 
+        self.browser.find_element(By.XPATH, '/html/body/div[1]/section/nav/div[2]/div/div/div[3]/div/div[2]/a').click()
+        try:
+            WebDriverWait(self.browser, 15).until(
+                EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/section/div/div[2]/div/div/div[2]/div/div[3]/div/button'))
+            )
+        except TimeoutException:
+            print('Timeout')
+            
         print(len(data), 'followers found')
 
         r = self.insert_followers(data)
