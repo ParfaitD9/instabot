@@ -16,8 +16,6 @@ from bs4 import BeautifulSoup
 class Crawler:
     def __init__(self, auth= False) -> None:
         if auth:
-            #opt = ChromeOptions()
-            #opt.binary_location = '/usr/bin/brave-browser'
             s = Service('/home/parfait/Logs/chromedriver')
             #service_args= ['--proxy=localhost:9150', '--proxy-type=sock5']
             self.browser = webdriver.Chrome()
@@ -152,7 +150,7 @@ class Crawler:
             con.close()
 
             return r
-            
+
     def send_messages(self):
         msg_btn = self.browser.find_element_by_xpath('/html/body/div[1]/section/nav/div[2]/div/div/div[3]/div/div[2]/a/svg/polygon')
         msg_btn.click()
