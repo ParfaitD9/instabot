@@ -25,7 +25,7 @@ class Crawler:
             opts.add_argument('--no-sandbox')
             opts.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
             s = Service(executable_path= os.environ.get('CHROMEDRIVER_PATH'))
-            self.browser = webdriver.Chrome(service= s, chrome_options= opts)
+            self.browser = webdriver.Chrome(executable_path= os.environ.get('CHROMEDRIVER_PATH'), chrome_options= opts)
             self.auth('canurap1@gmail.com', 'Test12345')
         else:
             with open('session.json') as r:
