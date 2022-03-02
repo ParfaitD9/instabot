@@ -11,8 +11,191 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import random as rd
 from bs4 import BeautifulSoup
-from . import orm
+#from .orm import update_user, insert_followers
 
+import sqlite3
+
+DB_PATH = 'src/database.db3'
+
+def set_message_default(message_id):
+    try:
+        con = sqlite3.connect(DB_PATH)
+        cur = con.cursor()
+
+        cur.execute('UPDATE messages SET actual=0 WHERE actual=?', (1,))
+        cur.execute('UPDATE messages SET actual=1 WHERE id=?', (message_id,))
+    except Exception as e:
+        print(f'{e.__class__} : {e}')
+        con.rollback()
+        r = {'status' : False, 'message' : e.args[0]}
+    else:
+        print(f'Message {message_id} set default')
+        con.commit()
+        r = {'status' : True, 'message' : f'Message {message_id} set default'}
+    finally:
+        cur.close()
+        con.close()
+
+        return r
+
+def messages_existants():
+    try:
+        con = sqlite3.connect(DB_PATH)
+        cur = con.cursor()
+
+        cur.execute('SELECT * FROM messages')
+    except Exception as e:
+        print(f'{e.__class__} : {e}')
+        con.rollback()
+        r = {'status' : False, 'message' : e.args[0]}
+    else:
+        r = {'status' : True, 'message' : f'SUCCES', 'data' : cur.fetchall()}
+    finally:
+        cur.close()
+        con.close()
+
+    return r
+
+def insert_followers(followers):
+    try:
+        con = sqlite3.connect(DB_PATH)
+        cur = con.cursor()
+        for follower in followers:
+            try:
+                cur.execute('INSERT INTO users (username) VALUES (?)', (follower,))
+            except sqlite3.IntegrityError as e:
+                print(e)
+                continue
+            else:
+                print(follower, 'added')
+        #r = {'status' : True, 'message' : 'User already exists'}
+    except Exception as e:
+        print(f'{e.__class__} : {e}')
+        con.rollback()
+        r = {'status' : False, 'message' : e.args[0]}
+    else:
+        print('Insertion done')
+        con.commit()
+        r = {'status' : True, 'message' : 'Insertion done'}
+    finally:
+        cur.close()
+        con.close()
+
+        return r
+
+def update_user(user):
+    try:
+        con = sqlite3.connect(DB_PATH)
+        cur = con.cursor()
+
+        cur.execute('UPDATE users SET pinned=1 WHERE username= ?', (user,))
+    except Exception as e:
+        print(f'{e.__class__} : {e}')
+        con.rollback()
+        r = {'status' : False, 'message' : e.args[0]}
+    else:
+        print(f'User {user} updated')
+        con.commit()
+        r = {'status' : True, 'message' : f'User {user} updated'}
+    finally:
+        cur.close()
+        con.close()
+
+        return r
+
+def add_new_message(message, set_default= False):
+    try:
+        con = sqlite3.connect(DB_PATH)
+        cur = con.cursor()
+
+        cur.execute('INSERT INTO messages (message) VALUES (?)', (message,))
+    except sqlite3.IntegrityError as e:
+        print(e)
+        r = {'status' : True, 'message' : 'Message already exists'}
+    except Exception as e:
+        print(f'{e.__class__} : {e}')
+        con.rollback()
+        r = {'status' : False, 'message' : e.args[0]}
+    else:
+        print('New message added')
+        con.commit()
+        r = {'status' : True, 'message' : 'New message added'}
+    finally:
+        cur.close()
+        con.close()
+
+        return r
+
+def all_users():
+    con = sqlite3.connect(DB_PATH)
+    cur = con.cursor()
+
+    try:
+        cur.execute('SELECT * FROM users')
+    except Exception as e:
+        print(e)
+        r = {
+            'status' : False,
+            'data' : e.args[0]
+        }
+    else:
+        r =  {
+            'status' : True,
+            'data' : cur.fetchall()
+        }
+    finally:
+        cur.close()
+        con.close()
+    
+    return r
+
+def pinned_users():
+    con = sqlite3.connect(DB_PATH)
+    cur = con.cursor()
+
+    try:
+        cur.execute('SELECT * FROM users WHERE pinned=?', (1,))
+    except Exception as e:
+        print(e)
+        r = {
+            'status' : False,
+            'data' : e.args[0]
+        }
+    else:
+        r =  {
+            'status' : True,
+            'data' : cur.fetchall()
+        }
+    finally:
+        cur.close()
+        con.close()
+    
+    return r
+
+def not_pinned_users():
+    con = sqlite3.connect(DB_PATH)
+    cur = con.cursor()
+
+    try:
+        cur.execute('SELECT * FROM users WHERE pinned=?', (0,))
+    except Exception as e:
+        print(e)
+        r = {
+            'status' : False,
+            'data' : e.args[0]
+        }
+    else:
+        r =  {
+            'status' : True,
+            'data' : cur.fetchall()
+        }
+    finally:
+        cur.close()
+        con.close()
+    
+    return r
+
+#ORM END
 
 class Crawler:
     def __init__(self, auth= False) -> None:
@@ -24,7 +207,7 @@ class Crawler:
             opts.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
             s = Service(executable_path= os.environ.get('CHROMEDRIVER_PATH'))
             self.browser = webdriver.Chrome(executable_path= os.environ.get('CHROMEDRIVER_PATH'), chrome_options= opts)
-            self.auth('canurap1@gmail.com', 'Test12345')
+            self.auth('pdetchenou@gmail.com', '32Dexembre')
             self.connected = True
         else:
             with open('session.json') as r:
@@ -101,7 +284,6 @@ class Crawler:
         try:
             print(self.browser.session_id)
             
-            
             time.sleep(rd.randrange(1,2))
             self.browser.find_element(By.XPATH, '/html/body/div[1]/section/div/div[2]/div/div/div[1]/div[1]/div/div[3]/button').click()
             
@@ -111,18 +293,34 @@ class Crawler:
             
             self.browser.find_element(By.XPATH, '/html/body/div[6]/div/div/div[2]/div[2]/div/div')
             
-            self.browser.find_element(By.XPATH, '/html/body/div[6]/div/div/div[2]/div[2]').find_element(By.TAG_NAME, 'button').click()
+            try:
+                u = WebDriverWait(self.browser, 10).until(
+                    EC.presence_of_element_located((By.XPATH, '/html/body/div[6]/div/div/div[2]/div[2]'))
+                )
+            except TimeoutException:
+                print("Timeout")
+            else:
+                u.find_element(By.TAG_NAME, 'button').click()
+            #self.browser.find_element(By.XPATH, '/html/body/div[6]/div/div/div[2]/div[2]').find_element(By.TAG_NAME, 'button').click()
             
             print('Click executed')
             
             time.sleep(rd.randrange(3,4))
-            self.browser.find_element(By.XPATH, '/html/body/div[6]/div/div/div[1]/div/div[2]/div/button').click()
+            try:
+                suivant = WebDriverWait(self.browser, 10).until(
+                    EC.presence_of_element_located((By.XPATH, '/html/body/div[6]/div/div/div[1]/div/div[2]/div/button'))
+                )
+            except TimeoutException:
+                print("Timeout on next")
+            else:
+                suivant.click()
+
             time.sleep(rd.randrange(3,4))
             text_area = self.browser.find_element(By.XPATH, '/html/body/div[1]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[2]/textarea')
             text_area.send_keys(message)
             time.sleep(rd.randrange(2,4))
             text_area.send_keys(Keys.ENTER)
-            orm.update_user(user)
+            update_user(user)
             print(f'Message successfully sent to {user}')
             time.sleep(1)
         except Exception as e:
@@ -187,9 +385,11 @@ class Crawler:
             time.sleep(2)
         
         soup = BeautifulSoup(self.browser.page_source, 'html.parser')
-        follow = soup.find_all('li')
-        data : list[str] = [fol.get_text() for fol in follow if follow][3:]
-        data = [fol.strip("S'abonner").split(maxsplit= 1)[0] for fol in data if fol]
+        follow = soup.find_all('li')[3:]
+        data : list[str] = [fol.find('a').get_text() for fol in follow if fol and fol.find('a')]
+        
+        
+        data = [fol.removesuffix("S'abonner").split(maxsplit= 1)[0] for fol in data if fol]
         self.browser.find_element(By.XPATH, '/html/body/div[6]/div/div/div/div[1]/div/div[2]/button').click()
 
         self.browser.find_element(By.XPATH, '/html/body/div[1]/section/nav/div[2]/div/div/div[3]/div/div[2]/a').click()
@@ -202,7 +402,7 @@ class Crawler:
 
         print(len(data), 'followers found')
 
-        r = orm.insert_followers(data)
+        r = insert_followers(data)
 
         return {'status' : True, 'data' : data, 'message' : r.get('message')}
 

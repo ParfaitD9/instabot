@@ -2,6 +2,7 @@ let hr = new XMLHttpRequest()
 
 let form =  document.getElementById('search-form')
 form.addEventListener('submit', e => {
+    console.log('Form submit')
     e.preventDefault()
     let data = new FormData(form)
     
