@@ -1,0 +1,57 @@
+{% extends 'model.html' %}
+{% block title %}Accueil{% endblock %}
+{% block content %}
+<div class="app">
+    <div class="under-group">
+        <h5>Followers</h5>
+        <form action="" method="get" id="search-form">
+            <div class="row">
+                <div class="col-md-2">
+                    <p class="form-label">Username</p>
+                </div>
+                <div class="col-md-7">    
+                    <input type="text" class="form-control" name="username" id="username">
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-success">Rechercher</button>
+                </div>
+            </div>
+            <a id="send-link" class="btn btn-secondary" style="display: none;">Envoyer</a>
+        </form>
+    </div>
+    
+    <div class="container">
+        <ul id="list" class="list-group">
+        </ul>
+    </div>
+    <div class="under-group">
+        <h5>Envoi de message</h5>
+        <form action="" method="post" id="send-form">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="user">Username</label>
+                        <input type="text" name="user" class="form-control" id="user">
+                    </div>                
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="msg">Message</label>
+                        <input type="text" class="form-control" name="message">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="msg-btn">Envoi</label>
+                        <button type="submit" id="msg-btn" class="btn btn-success">Envoyer</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <span id="datas"></span>
+</div>
+{% endblock %}
+{% block js %}
+    <script src="{{url_for('static', filename='js/home.js')}}"></script>
+{% endblock %}

@@ -1,12 +1,13 @@
+import json
 import os
-import re
 from flask import Flask, jsonify, render_template, request
 from utils.main import Crawler
+from utils.orm import add_new_message, all_users, messages_existants, set_message_default
 import sqlite3
 
 app = Flask(__name__)
 
-c = Crawler(auth= True)
+c = Crawler()
 
 @app.route('/')
 def auth():
@@ -16,7 +17,30 @@ def auth():
 
 @app.route('/home')
 def home():
-    return render_template('home.html')
+    return render_template('home-remake.html')
+
+@app.route('/new-message', methods= ['POST'])
+def new_message():
+    message, default = request.form.get('message'), request.form.get('set-default')
+    r = add_new_message(message)
+    return jsonify(r)
+    
+@app.route('/messages')
+def messages():
+    return render_template('messages-remake.html')
+
+@app.route('/default', methods= ['POST'])
+def default_message():
+    pk = int(request.form.get('msg'))
+    r = set_message_default(pk)
+
+    return jsonify(r)
+
+@app.route('/existants-messages')
+def existants_messages():
+    r = messages_existants()
+
+    return jsonify(r)
 
 @app.route('/send', methods= ['GET', 'POST'])
 def send_dm():
@@ -29,6 +53,14 @@ def send_dm():
         return jsonify(r)
     return jsonify({'status' : False, 'message':'GET method not allowed for this endpoint'})
 
+@app.route('/sendmass')
+def send_mass():
+    users = json.loads(request.args.get('users'))
+    r = c.send_mass_message(users, message= 'Hi !')
+
+    return r
+
+
 @app.route('/followers')
 def followers():
     print('Request datas is', request.args)
@@ -37,29 +69,19 @@ def followers():
 
     return jsonify(r)
 
-@app.route('/notpinned')
-def user_listing():
-    con = sqlite3.connect('../datas.db3')
-    cur = con.cursor()
+@app.route('/c-logout')
+def logout_crawler():
+    r = c.logout()
+    return jsonify(r)
 
-    try:
-        query = 'SELECT (name, pinned) FROM users WHERE pinned = ?'
-        cur.execute(query, (0,))
-    except Exception as e:
-        print(e)
-        return jsonify({
-            'status' : False,
-            'data' : []
-        })
-    else:
-        return jsonify({
-            'status' : True,
-            'data' : cur.fetchall()
-        })
-    finally:
-        con.close()
+@app.route('/users/all')
+def users():
+    r = all_users()
+    return jsonify(r)
 
-
+@app.route('/v1/connected')
+def is_connected():
+    return jsonify(c.connected)
 
 if __name__ == '__main__':
-    app.run(host= '0.0.0.0', port=os.environ.get('PORT'))
+    app.run(host= '0.0.0.0', port=os.environ.get('PORT'), debug= True)

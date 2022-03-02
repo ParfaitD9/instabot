@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='css/app.css')}}">
-    <title>Accueil</title>
+    <title>Messages</title>
 </head>
-<body class="container">
+<body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">Navbar</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,62 +44,45 @@
             </form>
         </div>
     </nav>
-    <div class="app">
-        <div class="under-group">
-            <h5>Followers</h5>
-            <form action="" method="get" id="search-form">
-                <div class="row">
-                    <div class="col-md-2">
-                        <p class="form-label">Username</p>
+    <div class="container">
+        <div class="app">
+            <div class="under-group">
+                <form id="form-1">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Messages existants</label>
+                        <select name="msg" id="existants" class="form-control">
+                            
+                        </select>
                     </div>
-                    <div class="col-md-7">    
-                        <input type="text" class="form-control" name="username" id="username">
-                    </div>
-                    <div class="col-md-3">
-                        <button type="submit" class="btn btn-success">Rechercher</button>
-                    </div>
-                </div>
-            </form>
-        </div>
+                    <button type="submit" id="msg-btn" class="btn btn-secondary">
+                        Set default
+                    </button>
+                    <p id="result-1"></p>
+                </form>
+            </div>
+            <div class="under-group">
+                <form id="form-2">
+                    <div class="form-group">
+                        <label for="new-msg">Nouveau message</label>
+                        <textarea name="message" id="" cols="30" rows="10" class="form-control">
         
-        <div class="container">
-            <ul id="list" class="list-group">
-            </ul>
-        </div> 
-        <div>
-            
-            <span><button id="send" class="btn btn-secondary" style="display: none;">Lancer l'envoi</button></span>
+                        </textarea>
+                    </div>
+                    <div class="form-group form-check">
+                        <input name="set-default" type="checkbox" class="form-check-input" id="set-default">
+                        <label class="form-check-label" for="set-default">Définir comme défaut</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        Ajouter
+                    </button>
+                    <p id="result-2"></p>
+                </form>
+            </div>
         </div>
-        <div class="under-group">
-            <h5>Envoi de message</h5>
-            <form action="" method="post" id="send-form">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="user">Username</label>
-                            <input type="text" name="user" class="form-control" id="user">
-                        </div>                
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="msg">Message</label>
-                            <input type="text" class="form-control" name="message">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label for="msg-btn">Envoi</label>
-                            <button type="submit" id="msg-btn" class="btn btn-success">Envoyer</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <span id="datas"></span>
     </div>
     
     <script src="{{url_for('static', filename='js/jquery-3.6.0.min.js')}}"></script>
     <script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{url_for('static', filename='js/home.js')}}"></script>
+    <script src="{{url_for('static', filename='js/messages.js')}}"></script>
 </body>
 </html>

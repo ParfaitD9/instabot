@@ -1,0 +1,43 @@
+{% extends 'model.html' %}
+{% block title %}Messages{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="app">
+        <div class="under-group">
+            <form id="form-1">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Messages existants</label>
+                    <select name="msg" id="existants" class="form-control">
+                        
+                    </select>
+                </div>
+                <button type="submit" id="msg-btn" class="btn btn-secondary">
+                    Set default
+                </button>
+                <p id="result-1"></p>
+            </form>
+        </div>
+        <div class="under-group">
+            <form id="form-2">
+                <div class="form-group">
+                    <label for="new-msg">Nouveau message</label>
+                    <textarea name="message" id="" cols="30" rows="10" class="form-control">
+    
+                    </textarea>
+                </div>
+                <div class="form-group form-check">
+                    <input name="set-default" type="checkbox" class="form-check-input" id="set-default">
+                    <label class="form-check-label" for="set-default">Définir comme défaut</label>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    Ajouter
+                </button>
+                <p id="result-2"></p>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="{{url_for('static', filename='js/messages.js')}}"></script>
+{% endblock %}

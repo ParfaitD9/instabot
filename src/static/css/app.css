@@ -22,3 +22,10 @@
     max-height: 7rem;
     margin-bottom: 1rem;
 }
+
+.under-group {
+    border: 1px solid #cfffc3;
+    background-color: #18181857;
+    padding: 0.5rem;
+    border-radius: 3px 3px;
+}
