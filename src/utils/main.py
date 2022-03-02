@@ -11,7 +11,8 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import random as rd
 from bs4 import BeautifulSoup
-from .orm import insert_followers, update_user
+import sqlite3
+from utils.orm import insert_followers, update_user
 
 
 class Crawler:
