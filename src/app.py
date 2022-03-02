@@ -3,11 +3,10 @@ import os
 from flask import Flask, jsonify, render_template, request
 from utils.main import Crawler
 from utils.orm import add_new_message, all_users, messages_existants, set_message_default
-import sqlite3
 
 app = Flask(__name__)
 
-c = Crawler()
+c = Crawler(auth= True)
 
 @app.route('/')
 def auth():
@@ -84,4 +83,4 @@ def is_connected():
     return jsonify(c.connected)
 
 if __name__ == '__main__':
-    app.run(host= '0.0.0.0', port=os.environ.get('PORT'), debug= True)
+    app.run(host= '0.0.0.0', port=os.environ.get('PORT'), debug= False)
