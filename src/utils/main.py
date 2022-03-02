@@ -11,8 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import random as rd
 from bs4 import BeautifulSoup
-import sqlite3
-from utils.orm import insert_followers, update_user
+from . import orm
 
 
 class Crawler:
@@ -123,7 +122,7 @@ class Crawler:
             text_area.send_keys(message)
             time.sleep(rd.randrange(2,4))
             text_area.send_keys(Keys.ENTER)
-            update_user(user)
+            orm.update_user(user)
             print(f'Message successfully sent to {user}')
             time.sleep(1)
         except Exception as e:
@@ -203,7 +202,7 @@ class Crawler:
 
         print(len(data), 'followers found')
 
-        r = insert_followers(data)
+        r = orm.insert_followers(data)
 
         return {'status' : True, 'data' : data, 'message' : r.get('message')}
 
