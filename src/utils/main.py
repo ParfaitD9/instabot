@@ -372,7 +372,7 @@ class Crawler:
             EC.presence_of_element_located((By.XPATH, '/html/body/div[6]/div/div/div/div[2]/ul/div/li[1]'))
         )
 
-        for j in range(2):
+        for j in range(10):
             self.browser.execute_script(
                 f'''
                 let ul = document.querySelector('div.isgrP');
