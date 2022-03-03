@@ -216,7 +216,8 @@ class Crawler:
                 self.browser.session_id = d.get('session')
             
             self.connected = True
-        
+        print('Successfully connected to insta')
+
     def auth(self, user, pwd):
         try:
             self.browser.get('https://instagram.com')
@@ -366,7 +367,15 @@ class Crawler:
         self.browser.get('https://www.instagram.com/{}/'.format(username))
         time.sleep(3)
         
-        self.browser.find_element(By.XPATH, '/html/body/div[1]/section/main/div/header/section/ul/li[2]').click()
+        try:
+            abo = WebDriverWait(self.browser, 10).until(
+                EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/section/main/div/header/section/ul/li[2]'))
+            )
+        except Exception as e:
+            return {'status' : True, 'data' : [], 'message' : 'Unable to click abonnés list'}
+        else:
+            abo.click()
+        #self.browser.find_element(By.XPATH, '/html/body/div[1]/section/main/div/header/section/ul/li[2]').click()
 
         div = WebDriverWait(self.browser, 15).until(
             EC.presence_of_element_located((By.XPATH, '/html/body/div[6]/div/div/div/div[2]/ul/div/li[1]'))
