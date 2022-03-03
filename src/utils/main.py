@@ -207,7 +207,7 @@ class Crawler:
             opts.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
             s = Service(executable_path= os.environ.get('CHROMEDRIVER_PATH'))
             self.browser = webdriver.Chrome(executable_path= os.environ.get('CHROMEDRIVER_PATH'), chrome_options= opts)
-            self.auth('canurap1@gmail.com', 'Test12345!')
+            self.auth('pdetchenou@gmail.com', '32Dexembre')
             self.connected = True
         else:
             with open('session.json') as r:
@@ -236,6 +236,7 @@ class Crawler:
             print(err)
             self.browser.quit()
         else:
+            print(self.browser.title)
             try:
                 self.current_url, self.session_id = self.browser.command_executor._url, self.browser.session_id
             except Exception as e:
@@ -366,6 +367,7 @@ class Crawler:
     def get_followers(self, username):
         self.browser.get('https://www.instagram.com/{}/'.format(username))
         time.sleep(3)
+        print(self.browser.title)
         
         try:
             abo = WebDriverWait(self.browser, 10).until(
