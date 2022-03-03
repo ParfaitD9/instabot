@@ -11,7 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import random as rd
 from bs4 import BeautifulSoup
-#from .orm import update_user, insert_followers
+
 
 import sqlite3
 
@@ -201,13 +201,13 @@ class Crawler:
     def __init__(self, auth= False) -> None:
         if auth:
             opts = webdriver.ChromeOptions()
-            #opts.add_argument('--headless')
+            opts.add_argument('--headless')
             opts.add_argument('--disable-dev-shm-usage')
             opts.add_argument('--no-sandbox')
             opts.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
             s = Service(executable_path= os.environ.get('CHROMEDRIVER_PATH'))
             self.browser = webdriver.Chrome(executable_path= os.environ.get('CHROMEDRIVER_PATH'), chrome_options= opts)
-            self.auth('pdetchenou@gmail.com', '32Dexembre')
+            self.auth('canurap1@gmail.com', 'Test12345!')
             self.connected = True
         else:
             with open('session.json') as r:
