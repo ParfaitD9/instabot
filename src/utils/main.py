@@ -201,7 +201,7 @@ class Crawler:
     def __init__(self, auth= False) -> None:
         if auth:
             opts = webdriver.ChromeOptions()
-            opts.add_argument('--headless')
+            #opts.add_argument('--headless')
             opts.add_argument('--disable-dev-shm-usage')
             opts.add_argument('--no-sandbox')
             opts.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
@@ -216,7 +216,7 @@ class Crawler:
                 self.browser.session_id = d.get('session')
             
             self.connected = True
-        print('Successfully connected to insta')
+        
 
     def auth(self, user, pwd):
         try:
@@ -260,6 +260,7 @@ class Crawler:
                         accept_cookies.click()
                     finally:
                         m.click()
+                        print('Successfully connected to insta')
                 except TimeoutException as e:
                     print('Timeout ...')
                 except Exception as e:
