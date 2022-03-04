@@ -4,6 +4,8 @@ from flask import Flask, jsonify, render_template, request
 from utils.main import Crawler
 from utils.orm import add_new_message, all_users, messages_existants, set_message_default
 
+#Hello
+
 app = Flask(__name__)
 
 c = Crawler(auth= True)
