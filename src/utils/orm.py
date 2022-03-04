@@ -176,7 +176,7 @@ def not_pinned_users():
     
     return r
 
-def get_default_message():
+def get_default_message() -> dict:
     con = sqlite3.connect(DB_PATH)
     cur = con.cursor()
 

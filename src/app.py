@@ -2,7 +2,7 @@ import json
 import os
 from flask import Flask, jsonify, render_template, request
 from utils.main import Crawler
-from utils.orm import add_new_message, all_users, messages_existants, set_message_default
+from utils.orm import add_new_message, all_users, messages_existants, set_message_default, get_default_message
 
 #Hello
 
@@ -57,7 +57,7 @@ def send_dm():
 @app.route('/sendmass')
 def send_mass():
     users = json.loads(request.args.get('users'))
-    r = c.send_mass_message(users, message= 'Hi !')
+    r = c.send_mass_message(users, message= get_default_message().get('data'))
 
     return r
 
@@ -85,8 +85,9 @@ def is_connected():
     return jsonify(c.connected)
 
 @app.route('/v1/message')
-def get_default_message():
-    pass
+def provide_default_message():
+    r = get_default_message()
+    return jsonify(r)
 
 if __name__ == '__main__':
     app.run(host= '0.0.0.0', port=os.environ.get('PORT'), debug= False)
