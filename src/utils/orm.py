@@ -175,3 +175,30 @@ def not_pinned_users():
         con.close()
     
     return r
+
+def get_default_message():
+    con = sqlite3.connect(DB_PATH)
+    cur = con.cursor()
+
+    try:
+        cur.execute('SELECT message FROM messages WHERE actual=?', (1,))
+    except Exception as e:
+        print(e)
+        r = {
+            'status' : False,
+            'data' : e.args[0]
+        }
+    else:
+        r =  {
+            'status' : True,
+            'data' : cur.fetchone()[0]
+        }
+    finally:
+        cur.close()
+        con.close()
+    
+    return r
+
+if __name__ == '__main__':
+    set_message_default(5)
+    print(get_default_message())

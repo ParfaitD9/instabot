@@ -84,5 +84,9 @@ def users():
 def is_connected():
     return jsonify(c.connected)
 
+@app.route('/v1/message')
+def get_default_message():
+    pass
+
 if __name__ == '__main__':
     app.run(host= '0.0.0.0', port=os.environ.get('PORT'), debug= False)
