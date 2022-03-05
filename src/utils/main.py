@@ -304,7 +304,7 @@ class Crawler:
                 u.find_element(By.TAG_NAME, 'button').click()
                 '/html/body/div[6]/div/div/div[2]/div[2]'
             
-            print('Click executed')
+                print('Click executed')
             
             time.sleep(rd.randrange(3,4))
             try:
@@ -317,13 +317,21 @@ class Crawler:
                 suivant.click()
 
             time.sleep(rd.randrange(3,4))
-            text_area = self.browser.find_element(By.XPATH, '/html/body/div[1]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[2]/textarea')
-            text_area.send_keys(message)
-            time.sleep(rd.randrange(2,4))
-            text_area.send_keys(Keys.ENTER)
-            update_user(user)
-            print(f'Message successfully sent to {user}')
-            time.sleep(1)
+            try:
+                text_area = WebDriverWait(self.browser, 5).until(
+                    EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[2]/textarea'))
+                )
+            except (TimeoutException,) as e:
+                print("Unable to find textarea")
+                return {'status' : False, 'message' : "Unable to find textarea"}
+            else:
+                #text_area = self.browser.find_element(By.XPATH, '/html/body/div[1]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[2]/textarea')
+                text_area.send_keys(message)
+                time.sleep(rd.randrange(2,4))
+                text_area.send_keys(Keys.ENTER)
+                update_user(user)
+                print(f'Message successfully sent to {user}')
+                time.sleep(1)
         except Exception as e:
             print(e)
             return {'status' : False, 'message' : e.args[0]}
