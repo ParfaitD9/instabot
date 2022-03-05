@@ -1,0 +1,48 @@
+{% extends 'model.html' %}
+{% block content %}
+<a class="btn btn-success" id="send">Envoyer les messages</a>
+<p><span id="infos"></span></p>
+<ul id="users">
+
+</ul>
+
+<script defer>
+    (function() {
+        let hr = new XMLHttpRequest()
+        hr.open('GET', `${window.location.protocol}//${window.location.host}/api/users/all`, true)
+        hr.send()
+
+        hr.onreadystatechange = function() {
+            if (hr.readyState === 4) {
+                let users = JSON.parse(hr.responseText).data
+                //console.log(`Users are ${users}`)
+                users.forEach( user => {
+                    let li = document.createElement('li')
+                    li.textContent = user[1]
+                    document.querySelector('ul#users').appendChild(li)
+                }
+                )
+                document.querySelector('span#infos').textContent = users.length
+
+                let i = 0;
+                document.querySelector('a#send').addEventListener('click', e => {
+                    e.preventDefault()
+                    window.setInterval(() => {
+                        hr.open('GET', `${window.location.protocol}//${window.location.host}/send?user=${users[i][1]}`)
+                        hr.send()
+
+                        hr.onreadystatechange = function() {
+                            if(hr.readyState === 4) {
+                                document.querySelector('span#infos').textContent = `${JSON.parse(hr.responseText).message}`
+                            }
+                        }
+                        i += 1;
+                    },
+                    60000
+                    )                
+                })
+            }
+        }
+    })()
+</script>
+{% endblock %}

@@ -201,7 +201,7 @@ class Crawler:
     def __init__(self, auth= False) -> None:
         if auth:
             opts = webdriver.ChromeOptions()
-            opts.add_argument('--headless')
+            #opts.add_argument('--headless')
             opts.add_argument('--disable-dev-shm-usage')
             opts.add_argument('--no-sandbox')
             opts.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
@@ -216,8 +216,8 @@ class Crawler:
                 self.browser.session_id = d.get('session')
             
             self.connected = True
+        self.delay = 6
         
-
     def auth(self, user, pwd):
         try:
             self.browser.get('https://instagram.com')
@@ -292,9 +292,7 @@ class Crawler:
             
             time.sleep(rd.randrange(1,2))
             self.browser.find_element(By.XPATH, '/html/body/div[6]/div/div/div[2]/div[1]/div/div[2]/input').send_keys(user)
-            time.sleep(rd.randrange(2,3))
-            
-            self.browser.find_element(By.XPATH, '/html/body/div[6]/div/div/div[2]/div[2]/div/div')
+            time.sleep(rd.randrange(8))
             
             try:
                 u = WebDriverWait(self.browser, 10).until(
@@ -304,7 +302,7 @@ class Crawler:
                 print("Timeout")
             else:
                 u.find_element(By.TAG_NAME, 'button').click()
-            #self.browser.find_element(By.XPATH, '/html/body/div[6]/div/div/div[2]/div[2]').find_element(By.TAG_NAME, 'button').click()
+                '/html/body/div[6]/div/div/div[2]/div[2]'
             
             print('Click executed')
             
@@ -351,14 +349,14 @@ class Crawler:
                 'message' : e.args[0]
             }
         else:
-            for i, user in enumerate(users[:5]):
+            for i, user in enumerate(users[:100]):
                 try:
                     self.send_message(user, message)
                 except Exception as e:
                     print(f'{e.__class__} : {e}')
                     break
                 else:
-                    time.sleep(3)
+                    time.sleep(self.delay)
             
             return {
                 'status' : True,

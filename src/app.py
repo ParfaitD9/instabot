@@ -2,7 +2,8 @@ import json
 import os
 from flask import Flask, jsonify, render_template, request
 from utils.main import Crawler
-from utils.orm import add_new_message, all_users, messages_existants, set_message_default, get_default_message
+from utils.orm import add_new_message, all_users, messages_existants \
+    , set_message_default, get_default_message, not_pinned_users
 
 #Hello
 
@@ -45,22 +46,19 @@ def existants_messages():
 
 @app.route('/send', methods= ['GET', 'POST'])
 def send_dm():
-    if request.method == 'POST':
-        username = request.form.get('user')
-        msg = request.form.get('message')
-        
-        r = c.send_message(username, msg)
+    username = request.args.get('user')
+    msg = get_default_message().get('data')
     
-        return jsonify(r)
-    return jsonify({'status' : False, 'message':'GET method not allowed for this endpoint'})
+    r = c.send_message(username, msg)
 
+    return jsonify(r)
+    
 @app.route('/sendmass')
 def send_mass():
     users = json.loads(request.args.get('users'))
     r = c.send_mass_message(users, message= get_default_message().get('data'))
 
     return r
-
 
 @app.route('/followers')
 def followers():
@@ -75,9 +73,19 @@ def logout_crawler():
     r = c.logout()
     return jsonify(r)
 
-@app.route('/users/all')
+@app.route('/api/users/all')
 def users():
     r = all_users()
+    return jsonify(r)
+
+@app.route('/users/all')
+def users_html():
+    return render_template('users.html')
+
+@app.route('/users/not')
+def users_not():
+    r = not_pinned_users()
+
     return jsonify(r)
 
 @app.route('/v1/connected')
@@ -90,4 +98,4 @@ def provide_default_message():
     return jsonify(r)
 
 if __name__ == '__main__':
-    app.run(host= '0.0.0.0', port=os.environ.get('PORT'), debug= False)
+    app.run(host= '0.0.0.0', port=os.environ.get('PORT'), debug= True)

@@ -22,8 +22,7 @@
         hr.open('GET', `${window.location.protocol}//${window.location.host}/followers?username=${data.get('username')}`, true)
         
         hr.send(data)
-        console.log(data)
-        console.log(hr.responseURL)
+        
 
         hr.onreadystatechange = function () {
             if (hr.readyState === 4) {
