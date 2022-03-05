@@ -5,7 +5,7 @@
 <ul id="users">
 
 </ul>
-
+<p><span id="remaining"></span></p>
 <script defer>
     (function() {
         let hr = new XMLHttpRequest()
@@ -34,6 +34,7 @@
                         hr.onreadystatechange = function() {
                             if(hr.readyState === 4) {
                                 document.querySelector('span#infos').textContent = `${JSON.parse(hr.responseText).message}`
+                                document.querySelector('#remaining').textContent = `${users.length - i} utilisateurs restants`
                             }
                         }
                         i += 1;
