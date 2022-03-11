@@ -207,7 +207,7 @@ class Crawler:
             opts.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
             s = Service(executable_path= os.environ.get('CHROMEDRIVER_PATH'))
             self.browser = webdriver.Chrome(executable_path= os.environ.get('CHROMEDRIVER_PATH'), chrome_options= opts)
-            self.auth('tomavorebeka@gmail.com', '32Dexembre!')
+            self.auth('username', 'password')
             self.connected = True
         else:
             with open('session.json') as r:
